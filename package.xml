@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>SEMEAR_PTR</name>
+  <name>semear_ptr</name>
   <version>0.0.0</version>
   <description>The SEMEAR_PTR package</description>
 
