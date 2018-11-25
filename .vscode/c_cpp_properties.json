@@ -11,7 +11,14 @@
                 "/usr/include"
             ],
             "name": "Linux",
+<<<<<<< HEAD
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+=======
             "intelliSenseMode": "gcc-x64"
+>>>>>>> e8abfac409fc2c88222e8c87279f4c32da03e99b
         }
     ],
     "version": 4
