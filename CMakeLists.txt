@@ -10,9 +10,11 @@ project(semear_ptr)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  tf
   std_msgs
   message_generation
   sensor_msgs
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -59,6 +61,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   FindPath.srv
+  HokuyoObstacleAvoidance.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -106,7 +109,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES SEMEAR_PTR
-   CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
+   CATKIN_DEPENDS roscpp rospy std_msgs message_runtime sensor_msgs geometry_msgs tf
 #  DEPENDS system_lib
 )
 
