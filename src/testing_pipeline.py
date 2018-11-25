@@ -55,6 +55,7 @@ for file in files:
     del contours[max_index] # this is the outside circle
     cnt  = max(contours, key = cv2.contourArea)
 
+    
     # Desenha o menor polígono convexo possível
     hull = cv2.convexHull(cnt,returnPoints = True)
     cv2.drawContours(img,[hull],0,(0,0,255),2)
@@ -78,7 +79,5 @@ for file in files:
     plt.imshow(img, 'gray')
 
 plt.show()
-
-
 
 
