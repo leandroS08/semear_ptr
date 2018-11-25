@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named cone
+
+# Build rule for target.
+cone: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 cone
+.PHONY : cone
+
+# fast build rule for target.
+cone/fast:
+	$(MAKE) -f CMakeFiles/cone.dir/build.make CMakeFiles/cone.dir/build
+.PHONY : cone/fast
+
+#=============================================================================
 # Target rules for targets named testeCor
 
 # Build rule for target.
@@ -124,17 +137,17 @@ testeCor/fast:
 .PHONY : testeCor/fast
 
 #=============================================================================
-# Target rules for targets named cone
+# Target rules for targets named v2
 
 # Build rule for target.
-cone: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 cone
-.PHONY : cone
+v2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 v2
+.PHONY : v2
 
 # fast build rule for target.
-cone/fast:
-	$(MAKE) -f CMakeFiles/cone.dir/build.make CMakeFiles/cone.dir/build
-.PHONY : cone/fast
+v2/fast:
+	$(MAKE) -f CMakeFiles/v2.dir/build.make CMakeFiles/v2.dir/build
+.PHONY : v2/fast
 
 code.o: code.cpp.o
 
@@ -162,6 +175,33 @@ code.s: code.cpp.s
 code.cpp.s:
 	$(MAKE) -f CMakeFiles/cone.dir/build.make CMakeFiles/cone.dir/code.cpp.s
 .PHONY : code.cpp.s
+
+code2.o: code2.cpp.o
+
+.PHONY : code2.o
+
+# target to build an object file
+code2.cpp.o:
+	$(MAKE) -f CMakeFiles/v2.dir/build.make CMakeFiles/v2.dir/code2.cpp.o
+.PHONY : code2.cpp.o
+
+code2.i: code2.cpp.i
+
+.PHONY : code2.i
+
+# target to preprocess a source file
+code2.cpp.i:
+	$(MAKE) -f CMakeFiles/v2.dir/build.make CMakeFiles/v2.dir/code2.cpp.i
+.PHONY : code2.cpp.i
+
+code2.s: code2.cpp.s
+
+.PHONY : code2.s
+
+# target to generate assembly for a file
+code2.cpp.s:
+	$(MAKE) -f CMakeFiles/v2.dir/build.make CMakeFiles/v2.dir/code2.cpp.s
+.PHONY : code2.cpp.s
 
 codeCor.o: codeCor.cpp.o
 
@@ -197,12 +237,16 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
-	@echo "... rebuild_cache"
-	@echo "... testeCor"
 	@echo "... cone"
+	@echo "... testeCor"
+	@echo "... v2"
+	@echo "... rebuild_cache"
 	@echo "... code.o"
 	@echo "... code.i"
 	@echo "... code.s"
+	@echo "... code2.o"
+	@echo "... code2.i"
+	@echo "... code2.s"
 	@echo "... codeCor.o"
 	@echo "... codeCor.i"
 	@echo "... codeCor.s"

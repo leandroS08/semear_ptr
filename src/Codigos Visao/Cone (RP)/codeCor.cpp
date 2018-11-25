@@ -9,7 +9,15 @@ int main( int argc, char** argv )
 {
     Mat img, imgHSV, imgThresholded;
      
-    img = imread(argv[1]);
+    //img = imread(argv[1]);
+    char* videoName = argv[1];
+    VideoCapture cap(videoName);
+
+    if(!cap.isOpened()) 
+    { 
+        cerr << " ERR: Unable find input Video source." << endl;
+		return -1;
+	}
 
     namedWindow("Original", CV_WINDOW_NORMAL);
     namedWindow("Control", CV_WINDOW_NORMAL);
@@ -34,10 +42,12 @@ int main( int argc, char** argv )
     cvCreateTrackbar("LowV", "Control", &iLowV, 255); //Value (0 - 255)
     cvCreateTrackbar("HighV", "Control", &iHighV, 255);
 
-    cvtColor(img, imgHSV, COLOR_BGR2HSV); //Convert the captured frame from BGR to HSV
-
     while (waitKey(30) != 27)
     {
+        cap.read(img);
+
+        cvtColor(img, imgHSV, COLOR_BGR2HSV); //Convert the captured frame from BGR to HSV
+
         inRange(imgHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgThresholded); //Threshold the image
             
         //morphological opening (remove small objects from the foreground)
