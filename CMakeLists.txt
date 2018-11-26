@@ -8,10 +8,23 @@ find_package(catkin REQUIRED COMPONENTS
   image_transport
   sensor_msgs
   std_msgs
+  actionlib_msgs
+  actionlib
 )
 
 find_package(OpenCV REQUIRED)
 
+add_service_files(
+  FILES
+  Valvula.srv
+  Painel.srv
+  Cone.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 #add_compile_options(-std=c++11)
 
 catkin_package(DEPENDS OpenCV)

@@ -7,6 +7,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include "std_msgs/Float32.h"
 #include "std_msgs/Int64.h"
+#include "semear_ptr/Painel.h"
 
 using namespace cv;
 using namespace std;
@@ -18,14 +19,20 @@ class ImageConverter
     ros::NodeHandle nh_;
     image_transport::ImageTransport it_;
     image_transport::Subscriber image_sub_;
-    //image_transport::Publisher image_pub_;
 
     public:
+
+    bool foi_processado_;
+    bool botao1_;
+    bool botao2_;
+    bool botao3_;
+
     ImageConverter()
     : it_(nh_)
     {
+        foi_processado_ = false;
         // Recebe a imagem da camera
-        image_sub_ = it_.subscribe("/usb_cam/image_raw", 10, &ImageConverter::imageCallback, this);
+        image_sub_ = it_.subscribe("/cv_camera/image_raw", 10, &ImageConverter::painelCallback, this);
 
         // Janelas
         namedWindow("Imagem Original", CV_WINDOW_NORMAL); 
@@ -40,7 +47,7 @@ class ImageConverter
         destroyWindow("Imagem HSV"); 
     }
 
-    void imageCallback(const sensor_msgs::ImageConstPtr& msg)
+    void painelCallback(const sensor_msgs::ImageConstPtr& msg)
     {
         cv_bridge::CvImagePtr cv_ptr;
         try
@@ -81,6 +88,7 @@ class ImageConverter
         if (circles.size()>2)
         {
             cout << "\n> Numero de circulos detectados (threshold = " << upper_threshold << "): " << circles.size() << endl;
+            ROS_INFO("> Circulos detectados: ");
             cout << "   -> Informacoes circulos " << endl;
         }
         
@@ -133,9 +141,20 @@ class ImageConverter
                     leitura_painel[i] = 0;
                 
                 if( leitura_painel[i] == 1)
+                {
+                    if(i==0) botao1_ = true;
+                    else if(i==1) botao2_ = true;
+                    else if(i==2) botao3_ = true;
                     cout << "        - LIGADO" << endl;
+                }
+                    
                 else
+                {
+                    if(i==0) botao1_ = false;
+                    else if(i==1) botao2_ = false;
+                    else if(i==2) botao3_ = false;
                     cout << "        - DESLIGADO" << endl;
+                }
             }
 
             imshow("Circulos Detectados", imgCircles);
@@ -143,17 +162,39 @@ class ImageConverter
         //else if (circles.size() >= 4)
         //    upper_threshold--;
 
-        imshow("Imagem Original", src);       
-        imshow("Imagem HSV", imgHSV);
+        foi_processado_ = true;
 
-        waitKey(3); 
+        imshow("Imagem Original", src);       
+        imshow("Imagem HSV", imgHSV); 
+
+        waitKey(0);
     }
 };
+
+bool le_painel(semear_ptr::Painel::Request &req,
+                semear_ptr::Painel::Response &res)
+{
+    ImageConverter ic;
+
+    while( ic.foi_processado_ == false){
+        ros::Duration(0.1).sleep();
+        ros::spinOnce();
+    }
+
+    res.botao1 = ic.botao1_;
+    res.botao2 = ic.botao2_;
+    res.botao3 = ic.botao3_;
+    
+    return true;
+}
 
 int main(int argc, char** argv)
 {
     ros::init(argc, argv, "painel_vision");
-    ImageConverter ic;
+    ros::NodeHandle n;
+
+    ros::ServiceServer service = n.advertiseService("painel_vision", le_painel);
+
     ros::spin();
     return 0;
 }

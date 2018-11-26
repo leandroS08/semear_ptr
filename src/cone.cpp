@@ -7,6 +7,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include "std_msgs/Float32.h"
 #include "std_msgs/Int64.h"
+#include "semear_ptr/Cone.h"
 
 using namespace cv;
 using namespace std;
@@ -18,14 +19,19 @@ class ImageConverter
     ros::NodeHandle nh_;
     image_transport::ImageTransport it_;
     image_transport::Subscriber image_sub_;
-    //image_transport::Publisher image_pub_;
 
     public:
+
+    bool foi_processado_;
+    bool vejo_cone_;
+    int64 pos_rel_cone_;
+
     ImageConverter()
     : it_(nh_)
     {
+        foi_processado_=false;
         // Recebe a imagem da camera
-        image_sub_ = it_.subscribe("/usb_cam/image_raw", 10, &ImageConverter::coneCallback, this);
+        image_sub_ = it_.subscribe("/cv_camera/image_raw", 10, &ImageConverter::coneCallback, this);
 
         // Janelas
         namedWindow("Original", CV_WINDOW_NORMAL);
@@ -117,26 +123,52 @@ class ImageConverter
             xMedio_cone += boundRect_cone[i].x;
         }
 
-        if(contours_cone.size() != 0)
+        if(contours_cone.size() > 0)
         {
             xMedio_cone = xMedio_cone / contours_cone.size();
             cout << "> X medio do cone: " << xMedio_cone << endl;
             float posCone =  ( (xMedio_cone - (src.cols/2)) * 90 ) / (src.cols/2);
             cout << "> Posicao relativa do cone: " << posCone << endl;
+
+            vejo_cone_ = true;
+            pos_rel_cone_ = (int) posCone;
         }
+        else
+            vejo_cone_ = false;
+        
+        foi_processado_ = true;
 
         imshow("Original", src);
         imshow("Thresholded Image", imgHSV);
         imshow("Contornos", drawing);
 
-        waitKey(3); 
+        waitKey(0);
     }
 };
+
+bool checa_cone(semear_ptr::Cone::Request &req,
+                semear_ptr::Cone::Response &res)
+{
+    ImageConverter ic;
+
+    while( ic.foi_processado_ == false){
+        ros::Duration(0.1).sleep();
+        ros::spinOnce();
+    }
+
+    res.vejo_cone = ic.vejo_cone_;
+    res.pos_rel_cone = ic.pos_rel_cone_;
+    
+    return true;
+}
 
 int main(int argc, char** argv)
 {
     ros::init(argc, argv, "cone_vision");
-    ImageConverter ic;
+
+    ros::NodeHandle n;
+    ros::ServiceServer service = n.advertiseService("cone_vision", checa_cone);
+
     ros::spin();
     return 0;
 }
