@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Cone (RP)"
+CMAKE_SOURCE_DIR = "/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Cone (RP)"
+CMAKE_BINARY_DIR = "/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)"
 
 #=============================================================================
 # Target rules for target CMakeFiles/cone.dir
@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = "/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Con
 CMakeFiles/cone.dir/all:
 	$(MAKE) -f CMakeFiles/cone.dir/build.make CMakeFiles/cone.dir/depend
 	$(MAKE) -f CMakeFiles/cone.dir/build.make CMakeFiles/cone.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Cone (RP)/CMakeFiles" --progress-num=1,2 "Built target cone"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles" --progress-num=1,2 "Built target cone"
 .PHONY : CMakeFiles/cone.dir/all
 
 # Include target in all.
@@ -76,9 +76,9 @@ all: CMakeFiles/cone.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cone.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Cone (RP)/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles" 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/cone.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Cone (RP)/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles" 0
 .PHONY : CMakeFiles/cone.dir/rule
 
 # Convenience name for target.
@@ -103,7 +103,7 @@ clean: CMakeFiles/cone.dir/clean
 CMakeFiles/testeCor.dir/all:
 	$(MAKE) -f CMakeFiles/testeCor.dir/build.make CMakeFiles/testeCor.dir/depend
 	$(MAKE) -f CMakeFiles/testeCor.dir/build.make CMakeFiles/testeCor.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Cone (RP)/CMakeFiles" --progress-num=3,4 "Built target testeCor"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles" --progress-num=3,4 "Built target testeCor"
 .PHONY : CMakeFiles/testeCor.dir/all
 
 # Include target in all.
@@ -113,9 +113,9 @@ all: CMakeFiles/testeCor.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/testeCor.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Cone (RP)/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles" 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/testeCor.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Cone (RP)/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles" 0
 .PHONY : CMakeFiles/testeCor.dir/rule
 
 # Convenience name for target.
@@ -140,7 +140,7 @@ clean: CMakeFiles/testeCor.dir/clean
 CMakeFiles/v2.dir/all:
 	$(MAKE) -f CMakeFiles/v2.dir/build.make CMakeFiles/v2.dir/depend
 	$(MAKE) -f CMakeFiles/v2.dir/build.make CMakeFiles/v2.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Cone (RP)/CMakeFiles" --progress-num=5,6 "Built target v2"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles" --progress-num=5,6 "Built target v2"
 .PHONY : CMakeFiles/v2.dir/all
 
 # Include target in all.
@@ -150,9 +150,9 @@ all: CMakeFiles/v2.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/v2.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Cone (RP)/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles" 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/v2.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Cone (RP)/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles" 0
 .PHONY : CMakeFiles/v2.dir/rule
 
 # Convenience name for target.

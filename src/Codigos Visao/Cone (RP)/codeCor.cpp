@@ -11,7 +11,8 @@ int main( int argc, char** argv )
      
     //img = imread(argv[1]);
     char* videoName = argv[1];
-    VideoCapture cap(videoName);
+    //VideoCapture cap(videoName);
+    VideoCapture cap(0);
 
     if(!cap.isOpened()) 
     { 
