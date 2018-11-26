@@ -10,6 +10,9 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   geometry_msgs
   cv_bridge
+  image_transport 
+  actionlib_msgs 
+  actionlib
 )
 
 
@@ -112,17 +115,10 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES SEMEAR_PTR
-   CATKIN_DEPENDS roscpp rospy std_msgs message_runtime sensor_msgs geometry_msgs tf cv_bridge OpenCV
-#  DEPENDS system_lib
-  cv_bridge
-  image_transport
-  sensor_msgs
-  std_msgs
-  actionlib_msgs
-  actionlib
+   CATKIN_DEPENDS roscpp rospy std_msgs message_runtime sensor_msgs geometry_msgs tf cv_bridge image_transport   actionlib_msgs actionlib
+  DEPENDS OpenCV
+   
 )
-
-
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
@@ -134,15 +130,18 @@ target_link_libraries(painel_vision
    ${catkin_LIBRARIES}
    ${OpenCV_LIBRARIES}
 )
+add_dependencies(painel_vision ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 add_executable(cone_vision src/cone.cpp)
 target_link_libraries(cone_vision
    ${catkin_LIBRARIES}
    ${OpenCV_LIBRARIES}
 )
+add_dependencies(cone_vision ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 add_executable(valvula_vision src/valvula.cpp)
 target_link_libraries(valvula_vision
    ${catkin_LIBRARIES}
    ${OpenCV_LIBRARIES}
 )
+add_dependencies(valvula_vision ${${PROJECT_NAME}_EXPORTED_TARGETS})
