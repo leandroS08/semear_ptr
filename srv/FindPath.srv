@@ -1,0 +1,5 @@
+uint32[] impossible_paths  
+uint32 start
+uint32 end
+---
+uint32[] path

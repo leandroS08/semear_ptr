@@ -200,7 +200,6 @@ int main ( int argc, char **argv )
 				cv_updateCornerOr(orientation, tempO, O); 			// Re-arrange marker corners w.r.t orientation of the QR code
 
 				int iflag = getIntersectionPoint(M[1],M[2],O[3],O[2],N);
-
 			
 				src.push_back(L[0]);
 				src.push_back(M[1]);
