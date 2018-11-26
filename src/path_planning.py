@@ -32,7 +32,7 @@ def handle_find_path(req):
             is_left =   j == i + 1 and not (i%3 == 0)
             is_right =  j == i - 1 and not (i%3 == 2)
             
-            if (not is_upper) and (not is_bottom) and (not is_left) and (not is_right) and j>=0 and i>=0 and j<=11 and j<=11:
+            if (not is_upper) and (not is_bottom) and (not is_left) and (not is_right) and j>=0 and i>=0 and j<=11 and i<=11:
                 
                 G2_data[i,j] = np.inf
                 G2_data[j,i] = np.inf

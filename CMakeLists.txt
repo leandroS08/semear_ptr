@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   sensor_msgs
   geometry_msgs
+  cv_bridge
 )
 
 ## System dependencies are found with CMake's conventions
@@ -61,6 +62,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   FindPath.srv
+  Manometro.srv
   HokuyoObstacleAvoidance.srv
 )
 
@@ -109,7 +111,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES SEMEAR_PTR
-   CATKIN_DEPENDS roscpp rospy std_msgs message_runtime sensor_msgs geometry_msgs tf
+   CATKIN_DEPENDS roscpp rospy std_msgs message_runtime sensor_msgs geometry_msgs tf cv_bridge
 #  DEPENDS system_lib
 )
 

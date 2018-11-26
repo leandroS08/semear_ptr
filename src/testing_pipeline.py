@@ -4,15 +4,15 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 import operator
-
+from math import atan2
 def radius(x):
    return x[2]
 
-files = ['/home/gonzales/Documents/catkin_ws/src/SEMEAR_PTR/img/manometro.jpg',
-    '/home/gonzales/Documents/catkin_ws/src/SEMEAR_PTR/img/manometro2.jpg',
-    '/home/gonzales/Documents/catkin_ws/src/SEMEAR_PTR/img/manometro3.jpg',
-    '/home/gonzales/Documents/catkin_ws/src/SEMEAR_PTR/img/manometro4.jpg',
-    '/home/gonzales/Documents/catkin_ws/src/SEMEAR_PTR/img/manometro5.jpg']
+files = ['/home/gonzales/manometro.jpg']
+
+radianos_manometro_0 = -0.737011559754
+valor_manometro_90 = 5
+
 
 for file in files:    
     img = cv2.imread(file,1)      # trainImage
@@ -55,13 +55,31 @@ for file in files:
     del contours[max_index] # this is the outside circle
     cnt  = max(contours, key = cv2.contourArea)
 
-    
     # Desenha o menor polígono convexo possível
     hull = cv2.convexHull(cnt,returnPoints = True)
     cv2.drawContours(img,[hull],0,(0,0,255),2)
 
+    M = cv2.moments(hull)
+    cx = int(M['m10']/M['m00'])
+    cy = int(M['m01']/M['m00'])
+    cx_hull = int(M['m10']/M['m00'])
+    cy_hull = int(M['m01']/M['m00'])
+
+    cv2.circle(img,(cx,cy),10,(255,255,255),thickness=-1) # diminui o raio do circulo
+
+    M = cv2.moments(cnt)
+    cx = int(M['m10']/M['m00'])
+    cy = int(M['m01']/M['m00'])
+    cx_cnt = int(M['m10']/M['m00'])
+    cy_cnt = int(M['m01']/M['m00'])
+
+    cv2.circle(img,(cx,cy),10,(127,127,127),thickness=-1) # diminui o raio do circulo
+
     # Ajusta uma reta
     line = cv2.fitLine(points=hull, distType=cv2.DIST_L2, param=0, reps=0.01, aeps=0.01)
+
+    posicao_relativa = atan2(cy_cnt-cy_hull,cx_cnt-cx_hull)
+    print(posicao_relativa*180/np.pi)
 
     rows, cols = img.shape
     vx = line[0]
@@ -72,11 +90,29 @@ for file in files:
     righty = round((( cols - x) * vy / vx) + y)
     point1 = ( int( cols - 1), int(righty))
     point2 = ( int( 0), int(lefty))
-
+    angulo = atan2(vy,vx)
     cv2.line(img, point1, point2, (127,127,127), 2, cv2.LINE_AA, 0)
 
+    print(atan2(vy,vx))
+    
+    resultado = 0
+    if posicao_relativa > 0:
+        if angulo > 0:
+            resultado = angulo
+        if angulo < 0:
+            resultado = angulo + np.pi
+    if posicao_relativa < 0:
+        if angulo < 0:
+            resultado = angulo
+        if angulo > 0:
+            resultado = angulo - np.pi
+
+    resultado = (valor_manometro_90-0) / (np.pi/2 - radianos_manometro_0) * (resultado - radianos_manometro_0)
+    print(resultado)
     plt.figure()
     plt.imshow(img, 'gray')
+
+
 
 plt.show()
 
