@@ -147,7 +147,8 @@ class ImageConverter
         imshow("Thresholded Image", imgHSV);
         imshow("Deteccao Valvula", drawing);
 
-        waitKey(0);
+        //waitKey(0);
+        waitKey(3); // para teste 
     }
 };
 
@@ -156,7 +157,8 @@ bool le_valvula(semear_ptr::Valvula::Request &req,
 {
     ImageConverter ic;
 
-    while( ic.foi_processado_ == false){
+    //while( ic.foi_processado_ == false){
+    while( waitKey(3) != 27 ){ // para teste
         ros::Duration(0.1).sleep();
         ros::spinOnce();
     }

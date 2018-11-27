@@ -66,8 +66,10 @@ class ImageConverter
     
         src = cv_ptr->image;
 
+        // Faz algumas conversoes e manipulacoes de cor na imagem original
         colorChanges(src, imgHSV);
 
+        // Encontra os contornos na imagem
         findContours( imgHSV, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0) );
 
         vector<vector<Point> > contours_poly( contours.size() );
@@ -76,7 +78,7 @@ class ImageConverter
         vector<Point2f>center( contours.size() );
         vector<float>radius( contours.size() );
         Mat drawing = src.clone();
-        float min_area = (src.rows * src.cols) * 0.0015;
+        float min_area = (src.rows * src.cols) * 0.05;
         for( size_t i = 0; i < contours.size(); i++ )
         {
             approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
@@ -129,6 +131,7 @@ class ImageConverter
             cout << "> X medio do cone: " << xMedio_cone << endl;
             float posCone =  ( (xMedio_cone - (src.cols/2)) * 90 ) / (src.cols/2);
             cout << "> Posicao relativa do cone: " << posCone << endl;
+            cout << endl;
 
             vejo_cone_ = true;
             pos_rel_cone_ = (int) posCone;
@@ -142,7 +145,8 @@ class ImageConverter
         imshow("Thresholded Image", imgHSV);
         imshow("Contornos", drawing);
 
-        waitKey(0);
+        //waitKey(0);
+        waitKey(3); // para teste
     }
 };
 
@@ -151,7 +155,8 @@ bool checa_cone(semear_ptr::Cone::Request &req,
 {
     ImageConverter ic;
 
-    while( ic.foi_processado_ == false){
+    //while( ic.foi_processado_ == false){
+    while( waitKey(3) != 27 ){ // para teste
         ros::Duration(0.1).sleep();
         ros::spinOnce();
     }

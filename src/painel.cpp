@@ -167,7 +167,8 @@ class ImageConverter
         imshow("Imagem Original", src);       
         imshow("Imagem HSV", imgHSV); 
 
-        waitKey(0);
+        // waitKey(0);
+        waitKey(3); // para teste
     }
 };
 
@@ -176,7 +177,8 @@ bool le_painel(semear_ptr::Painel::Request &req,
 {
     ImageConverter ic;
 
-    while( ic.foi_processado_ == false){
+    //while( ic.foi_processado_ == false){
+    while( waitKey(3) != 27 ) {
         ros::Duration(0.1).sleep();
         ros::spinOnce();
     }
