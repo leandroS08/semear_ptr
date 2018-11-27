@@ -11,53 +11,61 @@ void organizaCirculos(vector<Vec3f>& , vector<Vec3f>&);
 
 int main( int argc, char** argv )
 {
-    VideoCapture capture(0);
+    //VideoCapture capture(0);
+    char* videoName = "painel2.mp4";
+    VideoCapture capture(videoName);
 
     if(!capture.isOpened()) 
     { 
         cerr << " ERR: Unable find input Video source." << endl;
 		return -1;
 	}
-    
+
     Mat src;
     Mat imgGray, imgCircles;
     Mat imgHSV;
-    long int count_num;
-    int count_den;
-    int lum_circulos[6];
-    int leitura_painel[3];
-    int upper_threshold = 100;
 
     namedWindow("Imagem Original", CV_WINDOW_NORMAL); 
     namedWindow("Circulos Detectados", CV_WINDOW_NORMAL); 
     namedWindow("Imagem HSV", CV_WINDOW_NORMAL); 
 
+    long int count_num;
+    int count_den;
+    int lum_circulos[6];
+    int leitura_painel[3];
+    int upper_threshold = 110;
+
     while(waitKey(33) != 27)
     {
         capture.read(src);
+
         imgCircles = src.clone();
         
         cvtColor( src, imgGray, CV_BGR2GRAY );
         cvtColor( src, imgHSV, COLOR_BGR2HSV); 
 
-        GaussianBlur( imgGray, imgGray, Size(9, 9), 2, 2 );
+        //GaussianBlur( imgGray, imgGray, Size(9, 9), 2, 2 );
 
         vector<Vec3f> circles;
         vector<Vec3f> org_circles;
         Vec3b point_aux;
 
-        /// Apply the Hough Transform to find the circles
-        HoughCircles( imgGray, circles, CV_HOUGH_GRADIENT, 1, imgGray.rows/8, upper_threshold, 50, 0, 0 );
+        float minimum_radius = 0.015 * src.rows;
+        float maximum_radius = 0.070 * src.rows;
 
-        if (circles.size()>0)
-        {
+        /// Apply the Hough Transform to find the circles
+        HoughCircles( imgGray, circles, CV_HOUGH_GRADIENT, 1, imgGray.rows/8, upper_threshold, 30, minimum_radius, maximum_radius );
+
+        if (circles.size()>2)
             cout << "\n> Numero de circulos detectados (threshold = " << upper_threshold << "): " << circles.size() << endl;
-            cout << "   -> Informacoes circulos " << endl;
-        }
+
+        //org_circles = circles;
         
-        if(circles.size() >= 6)
+        if(circles.size() >= 4)
         {
             organizaCirculos(circles, org_circles);
+
+            cout << "   -> Informacoes circulos " << endl;
 
             for( size_t i = 0; i < org_circles.size(); i++ )
             {
@@ -104,9 +112,14 @@ int main( int argc, char** argv )
                     leitura_painel[i] = 0;
                 
                 if( leitura_painel[i] == 1)
+                {
                     cout << "        - LIGADO" << endl;
+                }
+                    
                 else
+                {
                     cout << "        - DESLIGADO" << endl;
+                }
             }
 
             imshow("Circulos Detectados", imgCircles);
@@ -114,9 +127,10 @@ int main( int argc, char** argv )
         //else if (circles.size() >= 4)
         //    upper_threshold--;
 
-
         imshow("Imagem Original", src);       
         imshow("Imagem HSV", imgHSV); 
+
+        waitKey(0);
     }
     
     return 0;
@@ -130,94 +144,113 @@ void organizaCirculos(vector<Vec3f>& circles, vector<Vec3f>& org_circles)
     for( size_t i = 0; i < circles.size(); i++ )
         raio_medio += circles[i][2];
     raio_medio = raio_medio / circles.size();
-    cout << "        - Raio medio: " << raio_medio <<  " (" << (1-raio_range)* raio_medio << "," << (1+raio_range)*raio_medio << ") " << endl;
+    cout << "   -> Raio medio: " << raio_medio <<  " (" << (1-raio_range)* raio_medio << "," << (1+raio_range)*raio_medio << ") " << endl;
 
-    // Selecao dos seis melhores circulos em caso de deteccao de mais de seis
+    // Selecao dos melhores circulos
     vector<Vec3f> aux_circles;
-    if(circles.size() > 6)
+    /*for( size_t i = 0; i < circles.size(); i++ )
     {
-        for( size_t i = 0; i < circles.size(); i++ )
-        {
-            if( (circles[i][2] < (1.3 * raio_medio)) && (circles[i][2] > (0.7 * raio_medio)) )
-                aux_circles.push_back(circles[i]);  
-        }
-        cout << "Circulos selecionados: " << aux_circles.size() << endl;
+        if( (circles[i][2] < (1.3 * raio_medio)) && (circles[i][2] > (0.7 * raio_medio)) )
+            aux_circles.push_back(circles[i]);  
     }
-    else
-        aux_circles = circles;
+    cout << "   -> Circulos selecionados: " << aux_circles.size() << endl;*/
 
-    int y_medio = 0;
-    int i_min_1 = -1;
-    int i_min_2 = -1;
-    int i_max_1 = -1;
-    int i_max_2 = -1;
-    for( int i = 0; i < 6; i++ )
+    aux_circles = circles;
+
+    if(aux_circles.size() <= 6)
     {
-        y_medio += aux_circles[i][1];
-
-        if(i_min_1 == -1)
-            i_min_1 = i;
-        else if(i_min_2 == -1)
-            i_min_2 = i;
-        else if(aux_circles[i][0] < aux_circles[i_min_1][0])
+        int y_medio = 0;
+        int i_min_1 = -1;
+        int i_min_2 = -1;
+        int i_max_1 = -1;
+        int i_max_2 = -1;
+        for( int i = 0; i < 6; i++ )
         {
-            i_min_2 = i_min_1;
-            i_min_1 = i;        
+            y_medio += aux_circles[i][1];
+
+            if( (i_min_1 == -1) && (i_min_2 == -1) )
+                i_min_1 = i;
+            else if(i_min_2 == -1)
+            {
+                if(aux_circles[i][0] < aux_circles[i_min_1][0])
+                {
+                    i_min_2 = i_min_1;
+                    i_min_1 = i;
+                }
+                else
+                    i_min_2 = i;
+            }
+            else if(aux_circles[i][0] <= aux_circles[i_min_1][0])
+            {
+                i_min_2 = i_min_1;
+                i_min_1 = i;        
+            }
+            else if(aux_circles[i][0] < aux_circles[i_min_2][0])
+                i_min_2 = i;
+
+
+            if( (i_max_1 == -1) && (i_max_2 == -1) )
+                i_max_1 = i;
+            else if(i_max_2 == -1)
+            {
+                if(aux_circles[i][0] > aux_circles[i_max_1][0])
+                {
+                    i_max_2 = i_max_1;
+                    i_max_1 = i;
+                }
+                else
+                    i_max_2 = i;
+            }
+            else if(aux_circles[i][0] >= aux_circles[i_max_1][0])
+            {
+                i_max_2 = i_max_1;
+                i_max_1 = i;
+            }
+            else if(aux_circles[i][0] > aux_circles[i_max_2][0])
+                i_max_2 = i;
         }
-        else if(aux_circles[i][0] < aux_circles[i_min_2][0])
-            i_min_2 = i;
 
-        if(i_max_1 == -1)
-            i_max_1 = i;
-        else if(i_max_2 == -1)
-            i_max_2 = i;
-        else if(aux_circles[i][0] > aux_circles[i_max_1][0])
+        y_medio = y_medio / 6;
+        //cout << "Y Medio: " << y_medio << endl;
+
+        //cout << "Minimo X 1: " << aux_circles[i_min_1][0] << endl;
+        //cout << "Minimo X 2: " << aux_circles[i_min_2][0] << endl;
+
+        //cout << "Maximo X 1: " << aux_circles[i_max_1][0] << endl;
+        //cout << "Maximo X 2: " << aux_circles[i_max_2][0] << endl;
+
+        int mapa[6] = {-1,-1,-1,-1,-1,-1};
+        for( int i = 0; i < 6; i++ )
         {
-            i_max_2 = i_max_1;
-            i_max_1 = i;
-        }
-        else if(aux_circles[i][0] > aux_circles[i_max_2][0])
-            i_max_2 = i;
-    }
-
-    y_medio = y_medio / 6;
-    /*cout << "Y Medio: " << y_medio << endl;
-
-    cout << "Minimo X 1: " << aux_circles[i_min_1][0] << endl;
-    cout << "Minimo X 2: " << aux_circles[i_min_2][0] << endl;
-
-    cout << "Maximo X 1: " << aux_circles[i_max_1][0] << endl;
-    cout << "Maximo X 2: " << aux_circles[i_max_2][0] << endl;*/
-
-    int mapa[6] = {-1,-1,-1,-1,-1,-1};
-    for( int i = 0; i < 6; i++ )
-    {
-        if( aux_circles[i][1] < y_medio )
-        {
-            if( (aux_circles[i][0] <= aux_circles[i_min_2][0]) && mapa[0]==-1 )
-                mapa[0] = i;
-            else if( (aux_circles[i][0] == aux_circles[i_max_1][0]) || (aux_circles[i][0] == aux_circles[i_max_2][0]) )
-                mapa[2] = i;
+            if( aux_circles[i][1] < y_medio )
+            {
+                if( aux_circles[i][0] <= aux_circles[i_min_2][0] ) 
+                    mapa[0] = i;
+                else if( aux_circles[i][0] >= aux_circles[i_max_2][0] )
+                    mapa[2] = i;
+                else
+                    mapa[1] = i;
+            }
             else
-                mapa[1] = i;
+            {
+                if( aux_circles[i][0] <= aux_circles[i_min_2][0] )
+                    mapa[3] = i;
+                else if( aux_circles[i][0] >= aux_circles[i_max_2][0] )
+                    mapa[5] = i;
+                else
+                    mapa[4] = i;
+            }
         }
-        else
-        {
-            if( (aux_circles[i][0] == aux_circles[i_min_1][0]) || (aux_circles[i][0] == aux_circles[i_min_2][0]) )
-                mapa[3] = i;
-            else if( (aux_circles[i][0] == aux_circles[i_max_1][0]) || (aux_circles[i][0] == aux_circles[i_max_2][0]) )
-                mapa[5] = i;
-            else
-                mapa[4] = i;
-        }
+
+        for( int i = 0; i < 6; i++ )
+            cout << "Mapa [ " << i << " ]: " << mapa[i] << endl;
+
+        //org_circles = aux_circles;
+
+        for(int j=0; j<aux_circles.size(); j++)
+            org_circles.push_back(aux_circles[mapa[j]]); 
     }
 
-    //for( int i = 0; i < 6; i++ )
-    //    cout << "Mapa [ " << i << " ]: " << mapa[i] << endl;
-
-    //org_circles = aux_circles;
-
-    for(int j=0; j<aux_circles.size(); j++)
-        org_circles.push_back(aux_circles[mapa[j]]);  
+     
 }
 

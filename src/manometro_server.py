@@ -32,7 +32,7 @@ def image_callback(data):
 def handle_manometro(req):
     global img       
     
-    image_sub = rospy.Subscriber('/cv_camera/image_raw', Image, image_callback)
+    image_sub = rospy.Subscriber('/usb_cam/image_raw', Image, image_callback)
         
     while ( img is None):
         print("MANOMETRO - Waiting Image")
@@ -40,9 +40,9 @@ def handle_manometro(req):
     
     image_sub.unregister()
     
-#    plt.figure()
-#    plt.title("Raw")
-#    plt.imshow(img, 'gray')
+    plt.figure()
+    plt.title("Raw")
+    plt.imshow(img, 'gray')
    
     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     img = cv2.inRange(img, (0, 0, 100), (180, 255, 255))
@@ -134,25 +134,26 @@ def handle_manometro(req):
 #   cv2.circle(img,(cx_cnt,cy_cnt),10,(255,255,255),thickness=-1) # diminui o raio do circulo
 
 #---   Desenha o polígono convexo em volta do ponteiro
-#    cv2.drawContours(img,[hull],0,(0,0,255),2)
+    cv2.drawContours(img,[hull],0,(0,0,255),2)
 
 #--- Desenha a linha que deve ser a do ponteiro
-#    x = line[2]
-#    y = line[3]
-#    lefty = round( (-x * vy / vx) + y)
-#    righty = round((( cols - x) * vy / vx) + y)
-#    point1 = ( int( cols - 1), int(righty))
-#    point2 = ( int( 0), int(lefty))
-#    cv2.line(img, point1, point2, (127,127,127), 2, cv2.LINE_AA, 0)
+    x = line[2]
+    y = line[3]
+    lefty = round( (-x * vy / vx) + y)
+    righty = round((( cols - x) * vy / vx) + y)
+    point1 = ( int( cols - 1), int(righty))
+    point2 = ( int( 0), int(lefty))
+    cv2.line(img, point1, point2, (127,127,127), 2, cv2.LINE_AA, 0)
 
-#    plt.figure()
-#    plt.imshow(img, 'gray')
-#    plt.show()
+    plt.figure()
+    plt.imshow(img, 'gray')
+    plt.show(block=False)
     
     resultado = (valor_manometro_90-0) / (np.pi/2 - radianos_manometro_0) * (resultado - radianos_manometro_0)
     
     img=None
-
+    rospy.Rate(2).sleep()
+    plt.close('all')
     return resultado
 
 
@@ -163,4 +164,8 @@ def manometro_server():
     rospy.spin()
 
 if __name__ == "__main__":
-    manometro_server()
+  #  manometro_server()
+    rospy.init_node('manometro_reader_server')
+    
+    while not rospy.is_shutdown():
+        handle_manometro(1)

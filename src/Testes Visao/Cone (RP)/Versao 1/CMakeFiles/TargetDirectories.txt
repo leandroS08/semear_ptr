@@ -1,5 +1,5 @@
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles/edit_cache.dir
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles/cone.dir
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles/testeCor.dir
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles/v2.dir
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/CMakeFiles/rebuild_cache.dir
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Cone (RP)/Versao 1/CMakeFiles/edit_cache.dir
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Cone (RP)/Versao 1/CMakeFiles/cone.dir
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Cone (RP)/Versao 1/CMakeFiles/testeCor.dir
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Cone (RP)/Versao 1/CMakeFiles/v2.dir
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Cone (RP)/Versao 1/CMakeFiles/rebuild_cache.dir

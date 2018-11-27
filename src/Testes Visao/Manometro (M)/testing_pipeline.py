@@ -13,9 +13,14 @@ files = ['/home/gonzales/manometro.jpg']
 radianos_manometro_0 = -0.737011559754
 valor_manometro_90 = 5
 
+print("[INFO] starting video stream...")
+vs = cv2.VideoCapture(1)
 
-for file in files:    
-    img = cv2.imread(file,1)      # trainImage
+# loop over the frames from the video stream
+while True:
+    # grab the frame from the threaded video stream and resize it to
+    # have a maximum width of 400 pixels
+    ret, img = vs.read()
     plt.figure()
     plt.imshow(img)
 

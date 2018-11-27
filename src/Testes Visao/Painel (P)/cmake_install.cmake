@@ -1,4 +1,4 @@
-# Install script for directory: /home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Painel (P)
+# Install script for directory: /home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Painel (P)
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Painel (P)/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Painel (P)/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

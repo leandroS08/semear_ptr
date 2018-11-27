@@ -6,13 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/code2.cpp
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Cone (RP)/Versao 1/code2.cpp
 opencv2/imgcodecs.hpp
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/opencv2/imgcodecs.hpp
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Cone (RP)/Versao 1/opencv2/imgcodecs.hpp
 opencv2/highgui.hpp
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/opencv2/highgui.hpp
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Cone (RP)/Versao 1/opencv2/highgui.hpp
 opencv2/imgproc.hpp
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/opencv2/imgproc.hpp
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Cone (RP)/Versao 1/opencv2/imgproc.hpp
 iostream
 -
 

@@ -1,0 +1,3 @@
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/GravarVideo/CMakeFiles/rebuild_cache.dir
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/GravarVideo/CMakeFiles/edit_cache.dir
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/GravarVideo/CMakeFiles/gravar.dir

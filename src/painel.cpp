@@ -32,7 +32,7 @@ class ImageConverter
     {
         foi_processado_ = false;
         // Recebe a imagem da camera
-        image_sub_ = it_.subscribe("/cv_camera/image_raw", 10, &ImageConverter::painelCallback, this);
+        image_sub_ = it_.subscribe("/usb_cam/image_raw", 10, &ImageConverter::painelCallback, this);
 
         // Janelas
         namedWindow("Imagem Original", CV_WINDOW_NORMAL); 
@@ -68,7 +68,7 @@ class ImageConverter
         int count_den;
         int lum_circulos[6];
         int leitura_painel[3];
-        int upper_threshold = 100;
+        int upper_threshold = 70;
 
         src = cv_ptr->image;
         imgCircles = src.clone();
@@ -82,8 +82,11 @@ class ImageConverter
         vector<Vec3f> org_circles;
         Vec3b point_aux;
 
+        float minimum_radius = 0.015 * src.rows;
+        float maximum_radius = 0.070 * src.rows;
+
         /// Apply the Hough Transform to find the circles
-        HoughCircles( imgGray, circles, CV_HOUGH_GRADIENT, 1, imgGray.rows/8, upper_threshold, 50, 0, 0 );
+        HoughCircles( imgGray, circles, CV_HOUGH_GRADIENT, 1, imgGray.rows/8, upper_threshold, 30, minimum_radius, maximum_radius );
 
         if (circles.size()>2)
         {
@@ -95,6 +98,8 @@ class ImageConverter
         if(circles.size() >= 6)
         {
             organizaCirculos(circles, org_circles);
+
+            //cout << "Circulos selecionados: " << org_circles.size() << endl;
 
             for( size_t i = 0; i < org_circles.size(); i++ )
             {
@@ -215,11 +220,61 @@ void organizaCirculos(vector<Vec3f>& circles, vector<Vec3f>& org_circles)
     vector<Vec3f> aux_circles;
     if(circles.size() > 6)
     {
+        // Guarda o raios dos circulos em um vetor auxiliar
+        //int aux_raios = (int) malloc(circles.size()*sizeof(int)); 
+        int aux_raios[circles.size()];
+        //int i_raios = (int) malloc(circles.size()*sizeof(int));
+        int i_raios[circles.size()];
         for( size_t i = 0; i < circles.size(); i++ )
         {
-            if( (circles[i][2] < (1.3 * raio_medio)) && (circles[i][2] > (0.7 * raio_medio)) )
-                aux_circles.push_back(circles[i]);  
+            aux_raios[i] = circles[i][2];
+            i_raios[i] = i;
+            //if( (circles[i][2] < (1.3 * raio_medio)) && (circles[i][2] > (0.7 * raio_medio)) )
+                //aux_circles.push_back(circles[i]);  
         }
+
+        // Ordena os círculos pelo tamanho do raios
+        int aux, i_aux, k, j;
+        for(k = 0; k < circles.size(); k++){
+            aux = aux_raios[k];
+            i_aux = k;
+            j =k-1;
+            while((j >= 0) && (aux_raios[j] > aux)){
+                aux_raios[j+1] = aux_raios[j];
+                i_raios[j+1] = i_raios[j];
+                j--;
+            }
+            aux_raios[j+1] = aux;
+            i_raios[j+1] = i_aux;
+        }
+
+        int dif_begin, dif_end;
+        dif_begin = aux_raios[1] - aux_raios[0];
+        dif_end = aux_raios[circles.size()-1] - aux_raios[circles.size()-2];
+        if(circles.size() == 7)
+        {
+            if(dif_end > dif_begin)
+            {
+                for(k=0; k<circles.size()-1; k++)
+                    aux_circles.push_back(circles[i_raios[k]]);
+            }
+            else
+                for(k=1; k<circles.size(); k++)
+                    aux_circles.push_back(circles[i_raios[k]]);
+        }
+        else if(circles.size() == 8)
+        {
+            for(k=1; k<circles.size()-1; k++)
+                aux_circles.push_back(circles[i_raios[k]]);
+        }
+        //////////////////////////////////////////////////////else 
+
+        //for(k=0; k<circles.size(); k++)
+        //{
+        //    cout << aux_raios[k] << endl;
+        //    cout << i_raios[k] << endl;
+        //}        
+
         cout << "Circulos selecionados: " << aux_circles.size() << endl;
     }
     else

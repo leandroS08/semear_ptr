@@ -1,4 +1,4 @@
-# Install script for directory: /home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)
+# Install script for directory: /home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Cone (RP)/Versao 1
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Cone (RP)/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Cone (RP)/Versao 1/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
