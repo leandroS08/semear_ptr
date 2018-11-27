@@ -21,7 +21,7 @@ time.sleep(2.0)
  
 # open the output CSV file for writing and initialize the set of
 # barcodes found thus far
-csv = open("/home/gonzales/barcode.csv", "w")
+csv = open("barcodes.csv", "w")
 found = set()
 
 # loop over the frames from the video stream
