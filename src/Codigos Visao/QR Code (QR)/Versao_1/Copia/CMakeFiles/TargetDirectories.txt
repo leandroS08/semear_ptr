@@ -1,4 +1,0 @@
-/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/QR Code (QR)/opencv_qr/CMakeFiles/rebuild_cache.dir
-/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/QR Code (QR)/opencv_qr/CMakeFiles/edit_cache.dir
-/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/QR Code (QR)/opencv_qr/CMakeFiles/qr_video.dir
-/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/QR Code (QR)/opencv_qr/CMakeFiles/qr_image.dir

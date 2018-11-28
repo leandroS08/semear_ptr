@@ -1,4 +1,0 @@
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Valvula (V)/CMakeFiles/edit_cache.dir
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Valvula (V)/CMakeFiles/rebuild_cache.dir
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Valvula (V)/CMakeFiles/testeCor.dir
-/home/leandro/catkin_ws/src/semear_ptr/src/Codigos Visao/Valvula (V)/CMakeFiles/valvula.dir

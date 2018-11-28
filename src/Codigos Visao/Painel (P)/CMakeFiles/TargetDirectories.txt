@@ -1,3 +1,0 @@
-/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Painel (P)/CMakeFiles/edit_cache.dir
-/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Painel (P)/CMakeFiles/rebuild_cache.dir
-/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/Painel (P)/CMakeFiles/Painel.dir

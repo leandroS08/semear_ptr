@@ -36,7 +36,7 @@ class ImageConverter
     {
         foi_processado_=false;
         // Recebe a imagem da camera
-        image_sub_ = it_.subscribe("/cv_camera/image_raw", 10, &ImageConverter::valveCallback, this);
+        image_sub_ = it_.subscribe("/usb_cam/image_raw", 10, &ImageConverter::valveCallback, this);
         
         // Janelas
         namedWindow("Original", CV_WINDOW_NORMAL);
@@ -97,57 +97,65 @@ class ImageConverter
             }
         }
 
-        vector<Rect> rect_selected(contours_selected.size());
-        for (size_t i = 0; i < contours_selected.size(); i++)
-            rect_selected[i] = boundingRect(Mat(contours_selected[i]));
-
-        int i_max = 0;
-        for (size_t i = 1; i < contours_selected.size(); i++)
+        if(contours_selected.size() > 0)
         {
-            if ((rect_selected[i].width * rect_selected[i].height) > (rect_selected[i_max].width * rect_selected[i_max].height))
-                i_max = i;
+            vector<Rect> rect_selected(contours_selected.size());
+            for (size_t i = 0; i < contours_selected.size(); i++)
+                rect_selected[i] = boundingRect(Mat(contours_selected[i]));
+
+            int i_max = 0;
+            for (size_t i = 0; i < contours_selected.size(); i++)
+            {
+                if ((rect_selected[i].width * rect_selected[i].height) > (rect_selected[i_max].width * rect_selected[i_max].height))
+                    i_max = i;
+            }      
+
+            //cout << i_max << endl; 
+
+            drawContours(drawing, contours_selected, i_max, Scalar(180, 255, 0), 3, 8, vector<Vec4i>(), 0, Point());
+            rectangle(drawing, rect_selected[i_max].tl(), rect_selected[i_max].br(), Scalar(255, 0, 255), 3, 8, 0);
+
+            x_left = rect_selected[i_max].x;
+            x_right = rect_selected[i_max].x + rect_selected[i_max].width;
+            x_medio_rec = rect_selected[i_max].x + (rect_selected[i_max].width / 2);
+            cout << "> X medio retangulo: " << x_medio_rec << endl;
+
+            delta_x = x_medio_rec - x_medio_hist;
+            //cout << "> Diferenca: " << delta_x << endl;
+
+            //int error_delta = 0.015 * src.cols;
+            //cout << "> Erro: " << error_delta << endl;
+            //if(delta_x < )
+
+            //cout << "> Altura: " << rect_selected[i_max].height << endl;
+            //cout << "> Comprimento: " << rect_selected[i_max].width << endl;
+            float rel_hw = -1;
+            if(rect_selected[i_max].width != 0)
+                rel_hw = ((float)rect_selected[i_max].height / (float)rect_selected[i_max].width);
+            //cout << "> Relacao altura-comprimento: " << rel_hw << endl;
+            //cout << endl;
+            
+            ROS_INFO("> Relacao altura-largura: %f", rel_hw );
+            if (rel_hw >= 2)
+            {
+                ROS_INFO("> FECHADA");
+                esta_aberta_ = false;
+            }
+            else
+            {
+                ROS_INFO("> ABERTA");
+                esta_aberta_ = true;
+            }
+
+            foi_processado_ = true;
         }
-
-        drawContours(drawing, contours_selected, i_max, Scalar(180, 255, 0), 3, 8, vector<Vec4i>(), 0, Point());
-        rectangle(drawing, rect_selected[i_max].tl(), rect_selected[i_max].br(), Scalar(255, 0, 255), 3, 8, 0);
-
-        x_left = rect_selected[i_max].x;
-        x_right = rect_selected[i_max].x + rect_selected[i_max].width;
-        x_medio_rec = rect_selected[i_max].x + (rect_selected[i_max].width / 2);
-        //cout << "> X medio retangulo: " << x_medio_rec << endl;
-
-        delta_x = x_medio_rec - x_medio_hist;
-        //cout << "> Diferenca: " << delta_x << endl;
-
-        //int error_delta = 0.015 * src.cols;
-        //cout << "> Erro: " << error_delta << endl;
-        //if(delta_x < )
-
-        //cout << "> Altura: " << rect_selected[i_max].height << endl;
-        //cout << "> Comprimento: " << rect_selected[i_max].width << endl;
-        float rel_hw = ((float)rect_selected[i_max].height / (float)rect_selected[i_max].width);
-        //cout << "> Relacao altura-comprimento: " << rel_hw << endl;
-        //cout << endl;
-        
-        ROS_INFO("> Relacao altura-largura: %f", rel_hw );
-        if (rel_hw >= 2.25)
-        {
-            ROS_INFO("> FECHADA");
-            esta_aberta_ = false;
-        }
-        else
-        {
-            ROS_INFO("> ABERTA");
-            esta_aberta_ = true;
-        }
-
-        foi_processado_ = true;
 
         imshow("Original", src);
         imshow("Thresholded Image", imgHSV);
         imshow("Deteccao Valvula", drawing);
 
-        waitKey(0);
+        //waitKey(0);
+        waitKey(3); // para teste 
     }
 };
 
@@ -156,7 +164,8 @@ bool le_valvula(semear_ptr::Valvula::Request &req,
 {
     ImageConverter ic;
 
-    while( ic.foi_processado_ == false){
+    //while( ic.foi_processado_ == false){
+    while( waitKey(3) != 27 ){ // para teste
         ros::Duration(0.1).sleep();
         ros::spinOnce();
     }
@@ -223,13 +232,17 @@ void histogramH(Mat &in)
             }
         }
 
-        if (count[col] != 0)
+        //if (count[col] != 0)
             //cout << "Coluna " << col << " tem " << count[col] << " pixeis" << endl;
 
+        if( (count[col] <= in.rows) && (count[col] > 0) )
             circle(histImage, Point(col, in.rows - count[col]), 1, Scalar(0, 0, 255), 3, 8, 0);
+        else  
+            circle(histImage, Point(col, 0), 1, Scalar(0, 0, 255), 3, 8, 0);
     }
 
-    x_medio_hist = count_Num / count_Den;
+    if(count_Den != 0) 
+        x_medio_hist = count_Num / count_Den;
 
     //cout << "> Numerador: " << count_Num << endl;
     //cout << "> Denominador: " << count_Den << endl;

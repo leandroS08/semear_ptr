@@ -1,0 +1,3 @@
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Painel (P)/CMakeFiles/edit_cache.dir
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Painel (P)/CMakeFiles/rebuild_cache.dir
+/home/leandro/catkin_ws/src/semear_ptr/src/Testes Visao/Painel (P)/CMakeFiles/Painel.dir

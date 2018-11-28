@@ -31,7 +31,7 @@ class ImageConverter
     {
         foi_processado_=false;
         // Recebe a imagem da camera
-        image_sub_ = it_.subscribe("/cv_camera/image_raw", 10, &ImageConverter::coneCallback, this);
+        image_sub_ = it_.subscribe("/usb_cam/image_raw", 10, &ImageConverter::coneCallback, this);
 
         // Janelas
         namedWindow("Original", CV_WINDOW_NORMAL);
@@ -66,8 +66,10 @@ class ImageConverter
     
         src = cv_ptr->image;
 
+        // Faz algumas conversoes e manipulacoes de cor na imagem original
         colorChanges(src, imgHSV);
 
+        // Encontra os contornos na imagem
         findContours( imgHSV, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0) );
 
         vector<vector<Point> > contours_poly( contours.size() );
@@ -76,15 +78,15 @@ class ImageConverter
         vector<Point2f>center( contours.size() );
         vector<float>radius( contours.size() );
         Mat drawing = src.clone();
-        float min_area = (src.rows * src.cols) * 0.0015;
+        float min_area = (src.rows * src.cols) * 0.01;
         for( size_t i = 0; i < contours.size(); i++ )
         {
             approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
             boundRect[i] = boundingRect( Mat(contours_poly[i]) );
             if( (boundRect[i].width * boundRect[i].height)  >= min_area )
             {
-                //drawContours( drawing, contours_poly, (int)i, Scalar( 180,255,0 ), 3, 8, vector<Vec4i>(), 0, Point() );
-                //rectangle( drawing, boundRect[i].tl(), boundRect[i].br(), Scalar( 255,0,255 ), 3, 8, 0 );
+                drawContours( drawing, contours_poly, (int)i, Scalar( 180,255,0 ), 3, 8, vector<Vec4i>(), 0, Point() );
+                rectangle( drawing, boundRect[i].tl(), boundRect[i].br(), Scalar( 255,0,255 ), 3, 8, 0 );
                 contours_selected.push_back(contours_poly[i]);
                 //cout << "X do contorno: " << boundRect[i].x << endl;
             }
@@ -129,6 +131,7 @@ class ImageConverter
             cout << "> X medio do cone: " << xMedio_cone << endl;
             float posCone =  ( (xMedio_cone - (src.cols/2)) * 90 ) / (src.cols/2);
             cout << "> Posicao relativa do cone: " << posCone << endl;
+            cout << endl;
 
             vejo_cone_ = true;
             pos_rel_cone_ = (int) posCone;
@@ -142,7 +145,8 @@ class ImageConverter
         imshow("Thresholded Image", imgHSV);
         imshow("Contornos", drawing);
 
-        waitKey(0);
+        //waitKey(0);
+        waitKey(3); // para teste
     }
 };
 
@@ -151,7 +155,8 @@ bool checa_cone(semear_ptr::Cone::Request &req,
 {
     ImageConverter ic;
 
-    while( ic.foi_processado_ == false){
+    //while( ic.foi_processado_ == false){
+    while( waitKey(3) != 27 ){ // para teste
         ros::Duration(0.1).sleep();
         ros::spinOnce();
     }
@@ -178,14 +183,14 @@ void colorChanges(Mat &in, Mat &out)
     int iLowH = 0;
     //int iHighH = 30; // cone.jpg e cone2.jpg
     //int iHighH = 18; // cone3.jpg e cone4.jpg
-    //int iHighH = 10; // video cone
-    int iHighH = 10;
+    int iHighH = 20; // video cone
+    //int iHighH = 10;
 
 
     //int iLowS = 0; // cone.jpg, cone2.jpg e cone3.jpg
     //int iLowS = 125; // cone4.jpg
-    //int iLowS = 162; // video cone
-    int iLowS = 99; 
+    int iLowS = 70; // video cone
+    //int iLowS = 99; 
     int iHighS = 255;
 
 

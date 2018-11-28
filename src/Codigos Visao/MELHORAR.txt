@@ -1,2 +1,0 @@
-Painel:
-    - Plano B caso não encontre os seis circulos

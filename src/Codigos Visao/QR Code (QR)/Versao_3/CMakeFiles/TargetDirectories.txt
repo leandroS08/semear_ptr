@@ -1,3 +1,0 @@
-/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/QR Code (QR)/Versao_3/CMakeFiles/edit_cache.dir
-/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/QR Code (QR)/Versao_3/CMakeFiles/rebuild_cache.dir
-/home/leandro/catkin_ws/src/SEMEAR_PTR/src/Codigos Visao/QR Code (QR)/Versao_3/CMakeFiles/qr_code.dir

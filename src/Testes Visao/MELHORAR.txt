@@ -1,0 +1,7 @@
+Painel:
+    - ordenar circulos detectados por raio e retirar extremos distoantes (muito pequenos ou muito grandes)
+    - implementar estratégia caso detecte 4 ou 5 -> ainda é possível obter resposta
+    - travas caso o numero de circulos detectados seja menor que 4 ou maior que 6
+
+Valvula
+    - floating point exception
