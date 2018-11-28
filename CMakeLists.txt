@@ -66,6 +66,7 @@ add_service_files(
   Valvula.srv
   Painel.srv
   Cone.srv
+  Navigation.srv
 )
 
 ## Generate actions in the 'action' folder

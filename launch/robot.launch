@@ -1,0 +1,26 @@
+<launch>
+  <master auto="start"/>
+
+  <!-- Run the map server -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find       semear_ptr)/maps/map.yaml _frame_id:=map "/>
+
+  <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0.5 0 0 0 1 base_link scan 100" /> 
+
+   <!--- Run AMCL -->
+  <node pkg="amcl" type="amcl" name="amcl" output="screen">
+		  <param name="odom_frame_id" value="odom"/>
+		  <param name="global_frame_id" value="map" />
+		  <param name="base_frame_id" value="base_link" /> 
+		  <param name="use_map_topic" value="true"/>
+		  <param name="initial_pose_x" value='0'/>
+		  <param name="initial_pose_y" value='0'/>
+		  <param name="initial_pose_a" value='0'/>
+  </node>
+
+  <node name="main" pkg="semear_ptr" type="main.py" />
+  <node name="navigation" pkg="semear_ptr" type="navigation.py" />
+  <node name="painel" pkg="semear_ptr" type="painel_vision" />
+  <node name="manometro" pkg="semear_ptr" type="manometro_server.py" />
+  <node name="valvula" pkg="semear_ptr" type="valvula_vision" />
+
+</launch>
