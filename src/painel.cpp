@@ -83,7 +83,7 @@ class ImageConverter
         Vec3b point_aux;
 
         float minimum_radius = 0.015 * src.rows;
-        float maximum_radius = 0.070 * src.rows;
+        float maximum_radius = 0.090 * src.rows;
 
         /// Apply the Hough Transform to find the circles
         HoughCircles( imgGray, circles, CV_HOUGH_GRADIENT, 1, imgGray.rows/8, upper_threshold, 30, minimum_radius, maximum_radius );
@@ -141,9 +141,9 @@ class ImageConverter
             for( int i = 0, j = 3; i < 3; i++, j++)
             {
                 if( lum_circulos[i] > lum_circulos[j])
-                    leitura_painel[i] = 1;
-                else
                     leitura_painel[i] = 0;
+                else
+                    leitura_painel[i] = 1;
                 
                 if( leitura_painel[i] == 1)
                 {

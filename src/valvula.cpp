@@ -138,13 +138,13 @@ class ImageConverter
             ROS_INFO("> Relacao altura-largura: %f", rel_hw );
             if (rel_hw >= 2)
             {
-                ROS_INFO("> FECHADA");
-                esta_aberta_ = false;
+                ROS_INFO("> ABERTA");
+                esta_aberta_ = true;
             }
             else
             {
-                ROS_INFO("> ABERTA");
-                esta_aberta_ = true;
+                ROS_INFO("> FECHADA");
+                esta_aberta_ = false;
             }
 
             foi_processado_ = true;
