@@ -13,16 +13,6 @@ files = ['/home/gonzales/manometro.jpg']
 radianos_manometro_0 = -0.737011559754
 valor_manometro_90 = 5
 
-<<<<<<< HEAD:src/testing_pipeline.py
-vs = cv2.VideoCapture(0)
-time.sleep(2.0)
-
-# loop over the frames from the video stream
-while True:
-	# grab the frame from the threaded video stream and resize it to
-	# have a maximum width of 400 pixels
-	ret, img = vs.read()
-=======
 print("[INFO] starting video stream...")
 vs = cv2.VideoCapture(1)
 
@@ -31,7 +21,6 @@ while True:
     # grab the frame from the threaded video stream and resize it to
     # have a maximum width of 400 pixels
     ret, img = vs.read()
->>>>>>> 04d1e74f6da4bc4567e5bede0c6878bf2f38627d:src/Testes Visao/Manometro (M)/testing_pipeline.py
     plt.figure()
     plt.imshow(img)
 

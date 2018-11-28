@@ -15,7 +15,6 @@ from matplotlib import pyplot as plt
 from math import atan2
 
 radianos_manometro_0 = -0.737011559754
-valor_manometro_90 = 5
 
 img = None
 bridge = CvBridge()
@@ -149,11 +148,12 @@ def handle_manometro(req):
     plt.imshow(img, 'gray')
     plt.show(block=False)
     
-    resultado = (valor_manometro_90-0) / (np.pi/2 - radianos_manometro_0) * (resultado - radianos_manometro_0)
+    resultado = resultado - radianos_manometro_0
     
     img=None
     rospy.Rate(2).sleep()
     plt.close('all')
+   
     return resultado
 
 
