@@ -133,6 +133,13 @@ target_link_libraries(painel_vision
 )
 add_dependencies(painel_vision ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
+add_executable(painel_teste src/painel_teste.cpp)
+target_link_libraries(painel_teste
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBRARIES}
+)
+add_dependencies(painel_teste ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
 add_executable(cone_vision src/cone.cpp)
 target_link_libraries(cone_vision
    ${catkin_LIBRARIES}
@@ -146,3 +153,10 @@ target_link_libraries(valvula_vision
    ${OpenCV_LIBRARIES}
 )
 add_dependencies(valvula_vision ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
+add_executable(valvula_teste src/valvula_teste.cpp)
+target_link_libraries(valvula_teste
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBRARIES}
+)
+add_dependencies(valvula_teste ${${PROJECT_NAME}_EXPORTED_TARGETS})

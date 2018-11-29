@@ -202,8 +202,8 @@ def handle_QR_code():
     # if the barcode text is currently not in our CSV file, write
     # the timestamp + barcode to disk and update the set
     if barcodeData not in found_barcode:
-        csv.write("{},{}\n".format(datetime.datetime.now(),
-                                   barcodeData))
+        csv.write("//{}\n".format(datetime.datetime.now())
+        csv.write("QR: {}\n".format(barcodeData))
         csv.flush()
         found_barcode.add(barcodeData)
 
@@ -237,6 +237,9 @@ def resetar_odometria():
 
 def main_code():
     global csv
+    csv.write("//{}\n".format(datetime.datetime.now())
+    csv.write("//ARQUIVO DE LEITURAS - SEMEAR USP\n")
+    csv.flush()
 
     rospy.init_node("main_code")
 
@@ -280,17 +283,43 @@ def main_code():
         if(leitura < 0.2):
             leitura = 0
         
-        csv.write("{},{}\n".format(datetime.datetime.now(), leitura))
+        csv.write("//{}\n".format(datetime.datetime.now())
+        csv.write("M: {} graus\n".format(leitura))
         csv.flush()
 
     elif(sensor == 'P'):  # Panel
         leitura = painel_srv()
-        csv.write("{}, Botao 1: {}, Botao 2: {}, Botao3: {} \n".format(datetime.datetime.now(), leitura.botao1, leitura.botao2, leitura.botao3))
+
+        if (leitura.botao1 == True)
+            string_botao1 = L
+        else
+            string_botao1 = D
+
+        if (leitura.botao2 == True)
+            string_botao2 = L
+        else
+            string_botao2 = D
+
+        if (leitura.botao3 == True)
+            string_botao3 = L
+        else
+            string_botao3 = D
+
+
+        csv.write("//{}\n".format(datetime.datetime.now())
+        csv.write("P: {}{}{}\n".format(string_botao1, string_botao2, string_botao3))
+        csv.flush()
 
     elif(sensor == 'V'):  # Valve
         leitura =  valvula_srv()
 
-        csv.write("{},{}\n".format(datetime.datetime.now(), leitura))
+        if(leitura == True)
+            string_valvula = A
+        else
+            string_valvula = F
+
+        csv.write("//{}\n".format(datetime.datetime.now())
+        csv.write("V: {}\n".format(string_valvula))
         csv.flush()
     else:
         pass

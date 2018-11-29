@@ -40,16 +40,16 @@ class ImageConverter
         image_sub_ = it_.subscribe("/usb_cam/image_raw", 10, &ImageConverter::valveCallback, this);
         
         // Janelas
-        //namedWindow("Original", CV_WINDOW_NORMAL);
-        //namedWindow("Thresholded Image", CV_WINDOW_NORMAL);
-        //namedWindow("Deteccao Valvula", CV_WINDOW_NORMAL);
+        namedWindow("Original", CV_WINDOW_NORMAL);
+        namedWindow("Thresholded Image", CV_WINDOW_NORMAL);
+        namedWindow("Deteccao Valvula", CV_WINDOW_NORMAL);
     }
 
     ~ImageConverter()
     {
-        //destroyWindow("Original");
-        //destroyWindow("Thresholded Image");
-        //destroyWindow("Deteccao Valvula");
+        destroyWindow("Original");
+        destroyWindow("Thresholded Image");
+        destroyWindow("Deteccao Valvula");
     }
 
     void valveCallback(const sensor_msgs::ImageConstPtr &msg)
@@ -125,7 +125,7 @@ class ImageConverter
                 x_left = rect_selected[i_max].x;
                 x_right = rect_selected[i_max].x + rect_selected[i_max].width;
                 x_medio_rec = rect_selected[i_max].x + (rect_selected[i_max].width / 2);
-                //cout << "> X medio retangulo: " << x_medio_rec << endl;
+                cout << "> X medio retangulo: " << x_medio_rec << endl;
 
                 delta_x = x_medio_rec - x_medio_hist;
                 //cout << "> Diferenca: " << delta_x << endl;
@@ -148,6 +148,7 @@ class ImageConverter
                 else 
                     esta_aberta_ = false;
 
+                foi_processado_ = true;
             }
             else
             {
@@ -157,6 +158,7 @@ class ImageConverter
                 else   
                     esta_aberta_ = false;
 
+                foi_processado_ = true;
             }
 
             if(esta_aberta_ == true)
@@ -164,12 +166,11 @@ class ImageConverter
             else   
                 ROS_INFO("> FECHADA");
 
-            foi_processado_ = true;
         }
 
-        //imshow("Original", src);
-        //imshow("Thresholded Image", imgHSV);
-        //imshow("Deteccao Valvula", drawing);
+        imshow("Original", src);
+        imshow("Thresholded Image", imgHSV);
+        imshow("Deteccao Valvula", drawing);
 
         //waitKey(0);
         waitKey(3); // para teste 
@@ -181,8 +182,8 @@ bool le_valvula(semear_ptr::Valvula::Request &req,
 {
     ImageConverter ic;
 
-    while( ic.foi_processado_ == false){
-    //while( waitKey(3) != 27 ){ // para teste
+    //while( ic.foi_processado_ == false){
+    while( waitKey(3) != 27 ){ // para teste
         ros::Duration(0.1).sleep();
         ros::spinOnce();
     }
@@ -195,10 +196,10 @@ bool le_valvula(semear_ptr::Valvula::Request &req,
 int main(int argc, char **argv)
 {
     srand(time(NULL));
-    ros::init(argc, argv, "valvula_vision");
+    ros::init(argc, argv, "valvula_teste");
 
     ros::NodeHandle n;
-    ros::ServiceServer service = n.advertiseService("valvula_vision", le_valvula);
+    ros::ServiceServer service = n.advertiseService("valvula_teste", le_valvula);
 
     ros::spin();
     return 0;

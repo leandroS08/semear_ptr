@@ -35,16 +35,16 @@ class ImageConverter
         image_sub_ = it_.subscribe("/usb_cam/image_raw", 10, &ImageConverter::painelCallback, this);
 
         // Janelas
-        //namedWindow("Imagem Original", CV_WINDOW_NORMAL); 
-        //namedWindow("Circulos Detectados", CV_WINDOW_NORMAL); 
-        //namedWindow("Imagem HSV", CV_WINDOW_NORMAL); 
+        namedWindow("Imagem Original", CV_WINDOW_NORMAL); 
+        namedWindow("Circulos Detectados", CV_WINDOW_NORMAL); 
+        namedWindow("Imagem HSV", CV_WINDOW_NORMAL); 
     }
 
     ~ImageConverter()
     {
-        //destroyWindow("Imagem Original"); 
-        //destroyWindow("Circulos Detectados"); 
-        //destroyWindow("Imagem HSV"); 
+        destroyWindow("Imagem Original"); 
+        destroyWindow("Circulos Detectados"); 
+        destroyWindow("Imagem HSV"); 
     }
 
     void painelCallback(const sensor_msgs::ImageConstPtr& msg)
@@ -68,7 +68,6 @@ class ImageConverter
         int count_den;
         int lum_circulos[6];
         int leitura_painel[3];
-        int upper_threshold = 70;
 
         src = cv_ptr->image;
         imgCircles = src.clone();
@@ -82,18 +81,25 @@ class ImageConverter
         vector<Vec3f> org_circles;
         Vec3b point_aux;
 
-        float minimum_radius = 0.015 * src.rows;
-        float maximum_radius = 0.090 * src.rows;
+        int upper_threshold = 70; // controla a sensibilidade do HoughCircles
+        float minimum_radius = 0.015 * src.rows; // raio minimo para deteccao dos circulos
+        float maximum_radius = 0.090 * src.rows; // raio maximo para deteccao dos circulos
 
         /// Apply the Hough Transform to find the circles
         HoughCircles( imgGray, circles, CV_HOUGH_GRADIENT, 1, imgGray.rows/8, upper_threshold, 30, minimum_radius, maximum_radius );
 
-        ROS_INFO("> Numero de circulos detectados: %d", (int)circles.size());
-        //if (circles.size()>2)
-        //{
-            //cout << "\n> Numero de circulos detectados (threshold = " << upper_threshold << "): " << circles.size() << endl;
-            //cout << "   -> Informacoes circulos " << endl;
-        //}
+        if (circles.size()>2)
+        {
+            cout << "\n> Numero de circulos detectados (threshold = " << upper_threshold << "): " << circles.size() << endl;
+            cout << "   -> Informacoes circulos " << endl;
+        }
+
+        /*for(int k=0; k<circles.size(); k++)
+        {
+            Point center(cvRound(circles[k][0]), cvRound(circles[k][1]));
+            int radius = cvRound(circles[k][2]);
+            circle( imgCircles, center, radius, Scalar(255,100,100), 3, 8, 0 );
+        }*/
         
         if(circles.size() >= 6)
         {
@@ -110,8 +116,8 @@ class ImageConverter
                 // circle outline
                 circle( imgCircles, center, radius, Scalar(100,20,100), 3, 8, 0 );
 
-                //cout << "        - Circulo " << i << ": posicao (" << center.x << "," << center.y << "), ";
-                //cout << "raio " << radius;
+                cout << "        - Circulo " << i << ": posicao (" << center.x << "," << center.y << "), ";
+                cout << "raio " << radius;
 
                 count_den = 0;
                 count_num = 0;
@@ -134,10 +140,10 @@ class ImageConverter
                 //cout << "     - Denominador: " << count_den << endl;
                 if (count_den != 0)
                     lum_circulos[i] = count_num / count_den;
-                //cout << ", luminosidade " << lum_circulos[i] << endl;
+                cout << ", luminosidade " << lum_circulos[i] << endl;
             }
 
-            //cout << "   -> Informacoes do painel " << endl;
+            cout << "   -> Informacoes do painel " << endl;
             for( int i = 0, j = 3; i < 3; i++, j++)
             {
                 if( lum_circulos[i] > lum_circulos[j])
@@ -150,7 +156,7 @@ class ImageConverter
                     if(i==0) botao1_ = true;
                     else if(i==1) botao2_ = true;
                     else if(i==2) botao3_ = true;
-                    //cout << "        - LIGADO" << endl;
+                    cout << "        - LIGADO" << endl;
                 }
                     
                 else
@@ -158,24 +164,21 @@ class ImageConverter
                     if(i==0) botao1_ = false;
                     else if(i==1) botao2_ = false;
                     else if(i==2) botao3_ = false;
-                    //cout << "        - DESLIGADO" << endl;
+                    cout << "        - DESLIGADO" << endl;
                 }
             }
 
-            ROS_INFO("> Informacoes do painel: %d %d %d", (int)leitura_painel[0], (int)leitura_painel[1], (int)leitura_painel[2]);
-
-            //imshow("Circulos Detectados", imgCircles);
+            imshow("Circulos Detectados", imgCircles);
         }
         //else if (circles.size() >= 4)
         //    upper_threshold--;
 
         foi_processado_ = true;
-        ROS_INFO("> Processamento do painel concluido\n");
 
-        //imshow("Imagem Original", src);       
-        //imshow("Imagem HSV", imgHSV); 
+        imshow("Imagem Original", src);       
+        imshow("Imagem HSV", imgHSV); 
 
-        //waitKey(0);
+        // waitKey(0);
         waitKey(3); // para teste
     }
 };
@@ -185,8 +188,8 @@ bool le_painel(semear_ptr::Painel::Request &req,
 {
     ImageConverter ic;
 
-    while( ic.foi_processado_ == false){
-    //while( waitKey(3) != 27 ) {
+    //while( ic.foi_processado_ == false){
+    while( waitKey(3) != 27 ) {
         ros::Duration(0.1).sleep();
         ros::spinOnce();
     }
@@ -200,10 +203,10 @@ bool le_painel(semear_ptr::Painel::Request &req,
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "painel_vision");
+    ros::init(argc, argv, "painel_teste");
     ros::NodeHandle n;
 
-    ros::ServiceServer service = n.advertiseService("painel_vision", le_painel);
+    ros::ServiceServer service = n.advertiseService("painel_teste", le_painel);
 
     ros::spin();
     return 0;
@@ -217,7 +220,7 @@ void organizaCirculos(vector<Vec3f>& circles, vector<Vec3f>& org_circles)
     for( size_t i = 0; i < circles.size(); i++ )
         raio_medio += circles[i][2];
     raio_medio = raio_medio / circles.size();
-    //cout << "        - Raio medio: " << raio_medio <<  " (" << (1-raio_range)* raio_medio << "," << (1+raio_range)*raio_medio << ") " << endl;
+    cout << "        - Raio medio: " << raio_medio <<  " (" << (1-raio_range)* raio_medio << "," << (1+raio_range)*raio_medio << ") " << endl;
 
     // Selecao dos seis melhores circulos em caso de deteccao de mais de seis
     vector<Vec3f> aux_circles;
@@ -278,7 +281,7 @@ void organizaCirculos(vector<Vec3f>& circles, vector<Vec3f>& org_circles)
         //    cout << i_raios[k] << endl;
         //}        
 
-        //cout << "Circulos selecionados: " << aux_circles.size() << endl;
+        cout << "Circulos selecionados: " << aux_circles.size() << endl;
     }
     else
         aux_circles = circles;
